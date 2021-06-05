@@ -13,6 +13,13 @@ public class TimeTable{
                                                     "Анни", "Ято", "Окабэ", "Курису", "Сики", "Мадока", "Юки", "Кайт"};
     final static transient private String[] TYPE_OF_CARGO = {"Liquid", "Loose", "Container"};
 
+
+    /**
+     *  Конструктор для класса TimeTable
+     *  При создании нового экземпляра все изначальные поля генерируются случайным образом
+     *  Поля unloadTimeDelay и dateDelay будут генерироваться в thirdservice
+     *  Для генерации имени корабля используется массив с именами
+     */
     public TimeTable() {
         Random random = new Random();
         date = random.nextInt(31) + 1;
@@ -86,6 +93,19 @@ public class TimeTable{
 
     public void setMinutes(int minutes) {
         this.minutes = minutes;
+    }
+
+
+    /**
+     * Генерирует расписание с указанным количеством кораблей
+     * @param countShips - количество кораблей, которые будут в расписании
+     * @return - возвращает сгенерированное расписание
+     */
+    public static TimeTable[] generateTimeTable(int countShips){
+        TimeTable[] timeTable = new TimeTable[countShips];
+        for (int i = 0; i < countShips; i++)
+            timeTable[i] = new TimeTable();
+        return timeTable;
     }
 
     @Override
