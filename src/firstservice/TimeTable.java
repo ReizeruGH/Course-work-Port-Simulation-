@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class TimeTable{
     private int date, hour, minutes, unloadTime, unloadTimeDelay, dateDelay, weightCargo = 0, countContainers = 0;
-    private final String nameOfShip, typeOfCargo;
+    private  String nameOfShip, typeOfCargo;
 
     final  static transient private  int MAX_COUNT_CONTAINER = 200, MAX_WEIGHT_CARGO = 100;
     final static transient private String[] NAMES_FOR_SHIPS = {"Дио", "Джотаро", "Канеки", "Баам", "Ичиго", "Мадара", "Лайт",
@@ -95,6 +95,25 @@ public class TimeTable{
         this.minutes = minutes;
     }
 
+    public void setWeightCargo(int weightCargo) {
+        this.weightCargo = weightCargo;
+    }
+
+    public void setCountContainers(int countContainers) {
+        this.countContainers = countContainers;
+    }
+
+    public void setNameOfShip(String nameOfShip) {
+        this.nameOfShip = nameOfShip;
+    }
+
+    public void setTypeOfCargo(String typeOfCargo) {
+        this.typeOfCargo = typeOfCargo;
+    }
+
+    public void setUnloadTime(int unloadTime) {
+        this.unloadTime = unloadTime;
+    }
 
     /**
      * Генерирует расписание с указанным количеством кораблей
