@@ -43,14 +43,12 @@ public class App{
     }
 
     /**
-     * Метод, который генерирует расписание используя метод из класса TimeTable, где количество кораблей вводит пользователь
-     * Полученное расписание мы сохраняем в *.json файл, имя которого вводит пользователь
+     * Метод, который получает от пользователя колличество кораблей и имя файла, куда будет сохранен json - строка
      * @param inputLine - для ввода countShips и filename
      */
     public static void saveToJson(Scanner inputLine){
         int countShips = 0;
         String filename;
-        JsonWorker jsonWork = new JsonWorker();
 
         System.out.println("Введите число кораблей в расписании");
         if(checkInput(inputLine))
@@ -59,12 +57,11 @@ public class App{
             System.out.println("Колличество кораблей для расписания = " + countShips + ". Введите число >0");
             return;
         }
-        TimeTable[] timeTable = new TimeTable[countShips];
-        timeTable =  TimeTable.generateTimeTable(countShips);
 
+        inputLine.nextLine();
         System.out.println("Введите имя файла для сохранения");
         filename = inputLine.nextLine() + ".json";
 
-        jsonWork.saveTimetableToJson(timeTable, filename);
+        new JsonWorker().saveTimetableToJson(countShips, filename);
     }
 }
