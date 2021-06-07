@@ -4,16 +4,20 @@ import secondservice.JsonWorker;
 import java.util.Scanner;
 
 public class App{
+
     public static void main(String[] args) {
         Scanner inputLine = new Scanner(System.in);
-        System.out.println("1 - Показать расписание используя метод из первого сервиса(10 элементов)\n" +
-                           "2 - Создать новую таблицу и сохранить ее в *.json");
+        System.out.println("""
+                1 - Показать расписание используя метод из первого сервиса(10 элементов)
+                2 - Создать новую таблицу и сохранить ее в *.json
+                3 - Вывести таблицу из *.json файла""");
 
         while (true) {
             if (checkInput(inputLine))
                 switch (inputLine.nextInt()) {
                     case 1 -> printTimeTable();
                     case 2 -> saveToJson(inputLine);
+                    case  3 -> readFromJson(inputLine);
                 }
         }
     }
@@ -43,12 +47,21 @@ public class App{
     }
 
     /**
+     * @param inputLine  - для ввода имени файла
+     * @return - вовзращает имя полученного файла и добавляет *.json, так как мне лень было это писать каждый в консоли
+     */
+    public static String getFileName(Scanner inputLine){
+        inputLine.nextLine();
+        System.out.println("Введите имя файла для сохранения");
+        return  inputLine.nextLine() + ".json";
+    }
+
+    /**
      * Метод, который получает от пользователя колличество кораблей и имя файла, куда будет сохранен json - строка
      * @param inputLine - для ввода countShips и filename
      */
     public static void saveToJson(Scanner inputLine){
         int countShips = 0;
-        String filename;
 
         System.out.println("Введите число кораблей в расписании");
         if(checkInput(inputLine))
@@ -58,10 +71,17 @@ public class App{
             return;
         }
 
-        inputLine.nextLine();
-        System.out.println("Введите имя файла для сохранения");
-        filename = inputLine.nextLine() + ".json";
+        new JsonWorker().saveTimetableToJson(countShips, getFileName(inputLine));
+    }
 
-        new JsonWorker().saveTimetableToJson(countShips, filename);
+    /**
+     * Вызывает метод из secondservice.JsonWorker, который считывает расписание из введенного файла
+     * Возвращает полученную таблицу с расписанием и выводит в консоль
+     * @param inputLine для ввода имени файла
+     */
+    public  static void  readFromJson(Scanner inputLine){
+        TimeTable[] timeTable = new JsonWorker().readTimetableFromJson(getFileName(inputLine));
+        for (int i = 0; i < timeTable.length; i++)
+            timeTable[i].toString();
     }
 }
