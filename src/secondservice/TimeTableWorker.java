@@ -1,7 +1,8 @@
 package secondservice;
 
 import firstservice.TimeTable;
-import java.util.Scanner;
+
+import java.util.*;
 
 public class TimeTableWorker {
 
@@ -88,5 +89,15 @@ public class TimeTableWorker {
                 inputLine.nextLine();
             }
         }
+    }
+
+    /**
+     * Метод, который сортирует расписание
+     * @param timeTable расписание, которое нужно отсортировать
+     * @return возвращает отсортированное расписание
+     */
+    public static TimeTable[] sortTimeTable(TimeTable[] timeTable){
+       Arrays.sort(timeTable);
+       return timeTable;
     }
 }

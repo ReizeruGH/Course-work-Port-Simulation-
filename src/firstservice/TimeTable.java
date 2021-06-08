@@ -1,9 +1,12 @@
 package firstservice;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Comparator;
 import java.util.Random;
 
-public class TimeTable{
-    private int date, hour, minutes, unloadTime, unloadTimeDelay, dateDelay, weightCargo = 0, countContainers = 0;
+public class TimeTable implements  Comparable<TimeTable>{
+    private Integer date, hour, minutes, unloadTime, unloadTimeDelay, dateDelay, weightCargo = 0, countContainers = 0;
     private  String nameOfShip, typeOfCargo;
 
     final  static transient private  int MAX_COUNT_CONTAINER = 200, MAX_WEIGHT_CARGO = 100;
@@ -141,6 +144,22 @@ public class TimeTable{
                 ", nameOfShip='" + nameOfShip + '\'' +
                 ", typeOfCargo='" + typeOfCargo + '\'' +
                 '}';
+    }
+
+    /**
+     * Сравнивает поля date,hour,minutes
+     * @param o расписание, с которым будем сравнивать
+     * @return возвращает результат сравнения по 3 полям TimeTable
+     */
+    @Override
+    public int compareTo(@NotNull TimeTable o) {
+        int compareResult = this.date.compareTo(o.date);
+        if(compareResult == 0) {
+            compareResult = this.hour.compareTo(o.hour);
+            if(compareResult == 0)
+                compareResult = this.minutes.compareTo(o.minutes);
+        }
+        return compareResult;
     }
 }
 
