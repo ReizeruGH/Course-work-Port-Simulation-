@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Данный класс реализует метода для чтения и сохранения данных в файл
+ */
 public class FileWorker {
 
     /**

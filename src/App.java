@@ -1,9 +1,13 @@
 import firstservice.TimeTable;
 import secondservice.JsonWorker;
 import secondservice.TimeTableWorker;
+import thirdservice.Port;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import static Utils.Utils.checkInput;
+import static Utils.Utils.getFileName;
+
 
 public class App{
 
@@ -22,23 +26,9 @@ public class App{
                     case 2 -> saveToJson(inputLine);
                     case 3 -> readFromJson(inputLine);
                     case 4 -> addRecord(inputLine);
+                    case 5 ->   new Port().startSimulation(getFileName(inputLine));
                     case 0 -> System.exit(0);
                 }
-        }
-    }
-
-
-    /**
-     * Метод проверяет, ввел ли пользователь с консоли число или нет
-     * @param inputLine - для ввода данных с консоли
-     * @return возвращает false - если пользовательский ввод не является числом
-     */
-    public static boolean checkInput(Scanner inputLine){
-        if(inputLine.hasNextInt())
-            return true;
-        else {
-            inputLine.nextLine();
-            return  false;
         }
     }
 
@@ -49,16 +39,6 @@ public class App{
         for (int i = 0; i < 10; i++){
             System.out.println(new TimeTable().toString());
         }
-    }
-
-    /**
-     * @param inputLine  - для ввода имени файла
-     * @return - вовзращает имя полученного файла и добавляет *.json, так как мне лень было это писать каждый в консоли
-     */
-    public static String getFileName(Scanner inputLine){
-        inputLine.nextLine();
-        System.out.println("Введите имя файла для сохранения/чтения/добавления");
-        return  inputLine.nextLine() + ".json";
     }
 
     /**
@@ -76,9 +56,7 @@ public class App{
             System.out.println("Колличество кораблей для расписания = " + countShips + ". Введите число >0");
             return;
         }
-
         timeTable =  TimeTable.generateTimeTable(countShips);
-
         new JsonWorker().saveTimetableToJson(timeTable, getFileName(inputLine));
     }
 

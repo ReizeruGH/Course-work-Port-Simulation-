@@ -1,9 +1,12 @@
 package secondservice;
 
 import firstservice.TimeTable;
-
 import java.util.*;
 
+
+/**
+ * Данный класс реализует вспомогательные метода для работы с таблицей
+ */
 public class TimeTableWorker {
 
     /**

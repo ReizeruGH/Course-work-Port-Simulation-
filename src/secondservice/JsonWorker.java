@@ -5,8 +5,10 @@ import com.google.gson.GsonBuilder;
 import firstservice.TimeTable;
 
 
+/**
+ * Данный класс реализует методы для работы с *.json файлом
+ */
 public class JsonWorker {
-    Gson jsonObj;
     String jsonString;
 
     /**
@@ -17,8 +19,7 @@ public class JsonWorker {
      * @param filename - имя файла для сохранения расписания в виду *.json файла
      */
     public void saveTimetableToJson(TimeTable[] timeTable, String filename){
-        jsonObj = new GsonBuilder().setPrettyPrinting().create();
-        jsonString =  jsonObj.toJson(timeTable);
+        jsonString =  new GsonBuilder().setPrettyPrinting().create().toJson(timeTable);
         FileWorker.saveFile(jsonString, filename);
     }
 
@@ -28,14 +29,9 @@ public class JsonWorker {
      * @return возвращает либо полученное расписание, либо null если не удалось открыть файл
      */
     public TimeTable[] readTimetableFromJson(String filename){
-        TimeTable[] timetable;
-        jsonObj = new Gson();
-
         jsonString =  FileWorker.readFile(filename);
         if(jsonString != null)
-            timetable = jsonObj.fromJson(jsonString, TimeTable[].class);
+            return new Gson().fromJson(jsonString, TimeTable[].class);
         else return  null;
-
-        return timetable;
     }
 }
