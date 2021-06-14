@@ -5,7 +5,7 @@ import Utils.Utils;
 import firstservice.TimeTable;
 import secondservice.FileWorker;
 
-import java.util.Arrays;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -13,41 +13,74 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Реализует "разгрузку" кораблей
  */
-public class UnloadTask implements  Runnable{
+@SuppressWarnings("ALL")
+public class UnloadTask implements  Runnable {
     TimeTable timeTable;
     PortTime currentTime;
     int startDate, startHour, startMinutes, unloadSleep;
     AtomicInteger countUnload;
-    String[] threadNames = {"Loose - 0", "Liquid - 0", "Container - 0"};
+    AtomicBoolean printStart = new AtomicBoolean(false), saveResult = new AtomicBoolean(false);
+
 
     public UnloadTask(TimeTable timeTable, PortTime currentTime) {
+        Random random = new Random();
         this.timeTable = timeTable;
         this.currentTime = currentTime;
         countUnload = new AtomicInteger(this.timeTable.getCountContainers() <= 0 ? this.timeTable.getWeightCargo() : this.timeTable.getCountContainers());
-        unloadSleep = this.timeTable.getCountContainers() > 0 ? TimeTable.containerUnloadTime : timeTable.getTypeOfCargo().equals("Liquid") ? TimeTable.liquidUnloadTime : TimeTable.looseUnloadTime;
+        if(random.nextBoolean())
+            timeTable.setUnloadTime(timeTable.getUnloadTime() + random.nextInt(1440));
+        unloadSleep = timeTable.getUnloadTime() / countUnload.get() + 1;
     }
 
     @Override
     public void run() {
-        if(Arrays.asList(threadNames).contains(Thread.currentThread().getName())){
+        if(!printStart.getAndSet(true)) {
+            System.out.printf("%s начал разгрузку в  %d:%d:%d", Thread.currentThread().getName(), currentTime.getDate(), currentTime.getHour(), currentTime.getMinutes());
             startDate = currentTime.getDate();
             startHour = currentTime.getHour();
             startMinutes = currentTime.getMinutes();
-            System.out.printf("Кран %s начал разгрузку в %d:%d:%d\n",timeTable.getTypeOfCargo(),startDate,startHour,startMinutes);
         }
-        while (countUnload.get() > 0){
+
+        while (countUnload.get() > 0) {
             Utils.sleep(unloadSleep);
             countUnload.getAndDecrement();
         }
-        if(Arrays.asList(threadNames).contains(Thread.currentThread().getName())){
-            System.out.printf("Кран %s закончил работу в %d:%d:%d\n", timeTable.getTypeOfCargo(), currentTime.getDate(), currentTime.getHour(), currentTime.getMinutes());
-            String result = new String();
-            result += "Корабль " + timeTable.getTypeOfCargo() + " начал работу в " + startDate + ":" + startHour + ":" + startMinutes;
-            result += " закончил работу в " + currentTime.getDate() + ":" + currentTime.getHour() + ":" + currentTime.getMinutes() + "\n";
-            synchronized (this){
-                FileWorker.saveFile(result, "result.txt");
-            }
-            //Дописать сохранение
+        if (Thread.currentThread().getName().equals("Loose"))
+            Port.looseThreadCount.getAndIncrement();
+        else if (Thread.currentThread().getName().equals("Liquid"))
+            Port.liquidThreadCount.getAndIncrement();
+        else
+            Port.containerThreadCount.getAndIncrement();
+
+        if(!saveResult.getAndSet(true)){
+            FileWorker.saveFile(getThreadResult(),"result.txt");
+            System.out.printf(Thread.currentThread().getName() + " end");
         }
+    }
+
+    private String getThreadResult(){
+        String result = new String();
+        Utils utils = new Utils();
+        int sumDelay;
+        int [] waitTime = new int[3];
+        int[] unloadTime = new int[3];
+        int[] delayTime = new int[3];
+
+        utils.convectorTime(waitTime,startDate,startHour,startMinutes,timeTable.getDate(),timeTable.getHour(),timeTable.getMinutes());
+        utils.convectorTime(unloadTime,currentTime.getDate(),currentTime.getHour(),currentTime.getMinutes(),startDate,startHour,startMinutes);
+        utils.convectorTime(delayTime,currentTime.getDate(),currentTime.getHour(),currentTime.getMinutes(), timeTable.getDate(), timeTable.getHour(),timeTable.getMinutes());
+
+        Port.waitTime.getAndAdd((waitTime[0] * 24) + (waitTime[1]) + (waitTime[2] / 60));
+
+        if((sumDelay =(delayTime[0] * 24) + (delayTime[1]) + (delayTime[2] / 60)) > timeTable.getUnloadTime())
+            Port.delayTime.add(sumDelay);
+
+        result += "Имя судна " + timeTable.getNameOfShip();
+        result += " Время прибытия в порт " + timeTable.getDate() + ":" + timeTable.getHour() + ":" + timeTable.getMinutes();
+        result += " Время ожидания разгрузки " + waitTime[0] + ":" + waitTime[1] + ":" + waitTime[2];
+        result += " Время начала разгрузки " + startDate + ":" + startHour + ":" + startMinutes;
+        result += " Время продолжительности разгрузки " + unloadTime[0] + ":" + unloadTime[1] + ":" + unloadTime[2] + "\n";
+
+        return result;
     }
 }

@@ -13,7 +13,7 @@ public class PortTime extends  Thread{
     public void run(){
         System.out.println("Порт начал работу");
         while (!Thread.currentThread().isInterrupted()){
-            Utils.sleep(5);
+            Utils.sleep(1);
             minutes++;
             if(minutes == 60){
                 minutes = 0;

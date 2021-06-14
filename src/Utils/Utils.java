@@ -1,5 +1,8 @@
 package Utils;
 
+import firstservice.TimeTable;
+import thirdservice.PortTime;
+
 import java.util.Scanner;
 
 public class Utils {
@@ -28,11 +31,25 @@ public class Utils {
         return  inputLine.nextLine() + ".json";
     }
 
-    public static void sleep(int milllis){
+    public static void sleep(int millis){
         try {
-            Thread.sleep(0, milllis);
+            Thread.sleep(millis);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+        }
+    }
+
+    public void convectorTime(int[] convertTime, int firstDate, int firstHour, int firstMinutes, int secondDate, int secondHour, int secondMinutes) {
+        convertTime[0] = firstDate - secondDate;
+        convertTime[1] = firstHour - secondHour;
+        convertTime[2] = firstMinutes - secondMinutes;
+
+        if (convertTime[2] < 0) {
+            convertTime[2] += 60;
+            convertTime[1]--;
+        }
+        if (convertTime[1] < 0) {
+            convertTime[1] += 24;
+            convertTime[0]--;
         }
     }
 }

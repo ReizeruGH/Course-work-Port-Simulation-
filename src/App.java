@@ -13,13 +13,13 @@ public class App{
 
     public static void main(String[] args) {
         Scanner inputLine = new Scanner(System.in);
-        System.out.println("""
+
+        while (true) {
+            System.out.println("""
                 1 - Показать расписание используя метод из первого сервиса(10 элементов)
                 2 - Создать новую таблицу и сохранить ее в *.json
                 3 - Вывести таблицу из *.json файла
                 4 - Добавить новый корабль в расписание""");
-
-        while (true) {
             if (checkInput(inputLine))
                 switch (inputLine.nextInt()) {
                     case 1 -> printTimeTable();
@@ -57,6 +57,10 @@ public class App{
             return;
         }
         timeTable =  TimeTable.generateTimeTable(countShips);
+        for (int i = 0; i < timeTable.length; i++) {
+            if(timeTable[i].getCountContainers() == 0 && timeTable[i].getWeightCargo() == 0)
+                System.out.println(i);
+        }
         new JsonWorker().saveTimetableToJson(timeTable, getFileName(inputLine));
     }
 

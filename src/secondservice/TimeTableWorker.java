@@ -103,4 +103,19 @@ public class TimeTableWorker {
        Arrays.sort(timeTable);
        return timeTable;
     }
+
+    public static TimeTable[] generateDateDelay(TimeTable[] timeTable) {
+        Random random = new Random();
+        for (int i = 0; i < timeTable.length; i++) {
+            if (random.nextBoolean())
+                timeTable[i].setDateDelay(random.nextInt((14 + 1) - 1));
+            timeTable[i].setDate(timeTable[i].getDateDelay() + timeTable[i].getDate());
+            if(timeTable[i].getDate() + timeTable[i].getDateDelay() <= 0){
+                timeTable[i].setDate(1);
+            } else if(timeTable[i].getDate() + timeTable[i].getDateDelay() > 31){
+                timeTable[i].setDate(31);
+            }
+        }
+        return timeTable;
+    }
 }

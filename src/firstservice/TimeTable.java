@@ -8,10 +8,12 @@ import java.util.Random;
  * Класс реализует методы и поля для создания расписание прибытия судов
  */
 public class TimeTable implements  Comparable<TimeTable>{
-    private Integer date, hour, minutes, unloadTime, unloadTimeDelay, dateDelay, weightCargo = 0, countContainers = 0;
+    private Integer date, hour, minutes, unloadTime, unloadTimeDelay = 0, dateDelay = 0, weightCargo = 0, countContainers = 0;
     private  String nameOfShip, typeOfCargo;
 
-    final static public int looseUnloadTime = 500, liquidUnloadTime = 400, containerUnloadTime = 350;
+    static Random random = new Random();
+
+    final static public int looseUnloadTime = 50, liquidUnloadTime = 40, containerUnloadTime = 35;
 
     final  static transient private  int MAX_COUNT_CONTAINER = 200, MAX_WEIGHT_CARGO = 100;
     final static transient private String[] NAMES_FOR_SHIPS = {"Дио", "Джотаро", "Канеки", "Баам", "Ичиго", "Мадара", "Лайт",
@@ -28,7 +30,6 @@ public class TimeTable implements  Comparable<TimeTable>{
      *  Для генерации имени корабля используется массив с именами
      */
     public TimeTable() {
-        Random random = new Random();
         date = random.nextInt(31) + 1;
         hour = random.nextInt(24);
         minutes = random.nextInt(60);
@@ -36,15 +37,15 @@ public class TimeTable implements  Comparable<TimeTable>{
         nameOfShip = NAMES_FOR_SHIPS[random.nextInt(NAMES_FOR_SHIPS.length)];
         switch (typeOfCargo) {
             case "Liquid" -> {
-                weightCargo = random.nextInt(MAX_WEIGHT_CARGO + 1);
+                weightCargo = random.nextInt(MAX_WEIGHT_CARGO) + 1;
                 unloadTime = liquidUnloadTime * weightCargo;
             }
             case "Loose" ->{
-                weightCargo = random.nextInt(MAX_WEIGHT_CARGO + 1);
+                weightCargo = random.nextInt(MAX_WEIGHT_CARGO) + 1;
                 unloadTime = looseUnloadTime * weightCargo;
             }
             case "Container"-> {
-                countContainers = random.nextInt(MAX_COUNT_CONTAINER + 1);
+                countContainers = random.nextInt(MAX_COUNT_CONTAINER) + 1;
                 unloadTime = containerUnloadTime * countContainers;
             }
         }
