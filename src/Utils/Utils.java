@@ -31,6 +31,10 @@ public class Utils {
         return  inputLine.nextLine() + ".json";
     }
 
+    /**
+     * Метод для сна тредов
+     * @param millis количество милисекунд для сна
+     */
     public static void sleep(int millis){
         try {
             Thread.sleep(millis);
@@ -38,6 +42,17 @@ public class Utils {
         }
     }
 
+    /**
+     * Метод отнимает время и проверяет, соотсвествуют ли они общепринятому стандарту времени (1-31:0-23:0-59)
+     * @param convertTime массив времени, для сохранения результатов после конвертации времени
+     *                    [0] - Хранит дату, [1] - хранит часы, [2] - хранит минуты
+     * @param firstDate - первая дата
+     * @param firstHour - первый час
+     * @param firstMinutes - первые минуты
+     * @param secondDate - вторая дата
+     * @param secondHour - второй час
+     * @param secondMinutes - вторая минута
+     */
     public void convectorTime(int[] convertTime, int firstDate, int firstHour, int firstMinutes, int secondDate, int secondHour, int secondMinutes) {
         convertTime[0] = firstDate - secondDate;
         convertTime[1] = firstHour - secondHour;

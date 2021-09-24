@@ -18,7 +18,7 @@ public class FileWorker {
     public static void saveFile(String dataString, String filename){
         FileWriter file = null;
         try {
-            file = new FileWriter(filename,true);
+            file = new FileWriter(filename,false);
             file.write(dataString);
             file.flush();
             file.close();

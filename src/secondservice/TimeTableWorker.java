@@ -19,9 +19,9 @@ public class TimeTableWorker {
     public static void addNewFields(TimeTable[] timeTable, int index, Scanner inputLine){
         timeTable[index] = new TimeTable();
 
-        checkInput(timeTable,inputLine,"Date", 0,32,index);
-        checkInput(timeTable,inputLine,"Hour", 0,25,index);
-        checkInput(timeTable,inputLine,"Minutes", -1,60,index);
+        checkInput(timeTable,inputLine,"Date", 0,31,index);
+        checkInput(timeTable,inputLine,"Hour", 0,23,index);
+        checkInput(timeTable,inputLine,"Minutes", -1,59,index);
 
         inputLine.nextLine();
         System.out.println("Имя корабля -  ");
@@ -35,17 +35,19 @@ public class TimeTableWorker {
                     case 1 -> {
                         timeTable[index].setTypeOfCargo("Loose");
                         checkInput(timeTable,inputLine,"Weight",0,101,index);
-                        timeTable[index].setUnloadTime(timeTable[index].getWeightCargo() * 500);
+                        timeTable[index].setUnloadTime(timeTable[index].getWeightCargo() * TimeTable.looseUnloadTime);
+                        timeTable[index].setCountContainers(0); //Для добавления новоого корабля с консоли создается новый эелмент расписание с рандомным числом контейнеров. Обнуляем, потому что груз не контейнеры
                     }
                     case 2 -> {
                         timeTable[index].setTypeOfCargo("Liquid");
                         checkInput(timeTable,inputLine,"Weight",0,101,index);
-                        timeTable[index].setUnloadTime(timeTable[index].getWeightCargo() * 400);
+                        timeTable[index].setUnloadTime(timeTable[index].getWeightCargo() * TimeTable.liquidUnloadTime);
+                        timeTable[index].setCountContainers(0); //Для добавления новоого корабля с консоли создается новый эелмент расписание с рандомным числом контейнеров. Обнуляем, потому что груз не контейнеры
                     }
                     case 3 -> {
                         timeTable[index].setTypeOfCargo("Container");
                         checkInput(timeTable,inputLine,"Count",0,101,index);
-                        timeTable[index].setUnloadTime(timeTable[index].getWeightCargo() * 350);
+                        timeTable[index].setUnloadTime(timeTable[index].getCountContainers() * TimeTable.containerUnloadTime);
                     }
                 }
                 break;
@@ -104,6 +106,11 @@ public class TimeTableWorker {
        return timeTable;
     }
 
+    /**
+     * Генерирует ззапаздания/преждевременное прибытие кораблей
+     * @param timeTable входное расписание
+     * @return возвращает расписание с сгенерированной задержкой по дате
+     */
     public static TimeTable[] generateDateDelay(TimeTable[] timeTable) {
         Random random = new Random();
         for (int i = 0; i < timeTable.length; i++) {
@@ -118,4 +125,5 @@ public class TimeTableWorker {
         }
         return timeTable;
     }
+
 }

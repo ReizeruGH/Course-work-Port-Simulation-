@@ -13,7 +13,7 @@ public class TimeTable implements  Comparable<TimeTable>{
 
     static Random random = new Random();
 
-    final static public int looseUnloadTime = 50, liquidUnloadTime = 40, containerUnloadTime = 35;
+    final static public int looseUnloadTime = 10, liquidUnloadTime = 15, containerUnloadTime = 5;
 
     final  static transient private  int MAX_COUNT_CONTAINER = 200, MAX_WEIGHT_CARGO = 100;
     final static transient private String[] NAMES_FOR_SHIPS = {"Дио", "Джотаро", "Канеки", "Баам", "Ичиго", "Мадара", "Лайт",

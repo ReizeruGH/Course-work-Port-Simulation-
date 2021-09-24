@@ -19,14 +19,15 @@ public class App{
                 1 - Показать расписание используя метод из первого сервиса(10 элементов)
                 2 - Создать новую таблицу и сохранить ее в *.json
                 3 - Вывести таблицу из *.json файла
-                4 - Добавить новый корабль в расписание""");
+                4 - Добавить новый корабль в расписание
+                5 - Запустить симуляцию порта""");
             if (checkInput(inputLine))
                 switch (inputLine.nextInt()) {
                     case 1 -> printTimeTable();
                     case 2 -> saveToJson(inputLine);
                     case 3 -> readFromJson(inputLine);
                     case 4 -> addRecord(inputLine);
-                    case 5 ->   new Port().startSimulation(getFileName(inputLine));
+                    case 5 ->   new Port().startSimulation(getFileName(inputLine),inputLine);
                     case 0 -> System.exit(0);
                 }
         }
